@@ -1379,7 +1379,7 @@
         // text/plain avoids a CORS preflight (Apps Script doesn't answer OPTIONS); no-cors is a
         // fire-and-forget POST (the opaque response is fine, the data still lands). The .catch
         // makes sure a network hiccup never blocks the user's success screen.
-        fetch('https://script.google.com/macros/s/AKfycbzdXhauHEYKfH5BBXNI2rdfAPbiHPVenKl9VkupmbpXjgpWGI9Sa0m-WPDE6WeJr7Q8/exec', {
+        fetch('https://script.google.com/macros/s/AKfycbx5Srji0rwe6lpt7otnsdRf5GWAs85a0A6-5-uWVhzclHi9jDv0Q-u2hfGb5HDpsA2f/exec', {
           method: 'POST',
           mode: 'no-cors',
           headers: { 'Content-Type': 'text/plain;charset=utf-8' },
@@ -1426,7 +1426,7 @@
         contact: { firstName: '', mobile: '', email: '' }
       };
 
-      var APPS_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbzdXhauHEYKfH5BBXNI2rdfAPbiHPVenKl9VkupmbpXjgpWGI9Sa0m-WPDE6WeJr7Q8/exec';
+      var APPS_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbx5Srji0rwe6lpt7otnsdRf5GWAs85a0A6-5-uWVhzclHi9jDv0Q-u2hfGb5HDpsA2f/exec';
       // DOM steps: 1 trade, 2 business, 3 goals, 4 PROFILE PREVIEW (endowment), 5 contact, 6 done.
       var PROGRESS = { 1: 12, 2: 34, 3: 56, 4: 80, 5: 92, 6: 100 };
       var LABEL    = { 1: 'Step 1 of 4', 2: 'Step 2 of 4', 3: 'Step 3 of 4', 4: 'Your profile', 5: 'Last step', 6: 'All done' };
