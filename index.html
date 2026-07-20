@@ -1565,7 +1565,7 @@
         var showActions = n >= 2 && n <= 5;
         actions.hidden = !showActions;
         if (showActions) {
-          backBtn.style.visibility = n === 2 ? 'hidden' : 'visible';
+           backBtn.style.visibility = 'visible';
           nextBtn.textContent = n === 5 ? 'Create my receptionist profile'
                               : n === 4 ? 'Activate my Receptionist'
                               : 'Continue';
@@ -1574,7 +1574,7 @@
         if (focus !== false) autofocus(n);
       }
 
-      backBtn.addEventListener('click', function () { if (current > 2) goToStep(current - 1); });
+       backBtn.addEventListener('click', function () { if (current > 1) goToStep(current - 1); });
       nextBtn.addEventListener('click', function () {
         // Step 4 is the profile preview: no input to validate, just commit forward.
         if (current === 4) { goToStep(5); return; }
