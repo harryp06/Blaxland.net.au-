@@ -1184,7 +1184,7 @@
               <div class="form-field">
                 <label for="ob-mobile">Mobile number</label>
                 <input class="form-input" type="tel" id="ob-mobile" placeholder="04XX XXX XXX" autocomplete="tel" inputmode="tel" />
-                <div class="ob-error" id="ob-mobile-err">A mobile number so we can call you back.</div>
+                <div class="ob-error" id="ob-mobile-err">Enter a valid Australian mobile, like 0412 345 678.</div>/
               </div>
               <div class="form-field">
                 <label for="ob-email">Email <span class="ob-optional">(optional)</span></label>
@@ -1575,6 +1575,12 @@
       }
 
        backBtn.addEventListener('click', function () { if (current > 1) goToStep(current - 1); });
+		 var mobileField = $('ob-mobile');
+      if (mobileField) {
+        mobileField.addEventListener('input', function () {
+          if (validAUMobile(mobileField.value)) setErr('ob-mobile', 'ob-mobile-err', false);
+        });
+      }
       nextBtn.addEventListener('click', function () {
         // Step 4 is the profile preview: no input to validate, just commit forward.
         if (current === 4) { goToStep(5); return; }
@@ -1598,6 +1604,22 @@
         if (input) input.classList.toggle('ob-invalid', show);
         if (err) err.classList.toggle('show', show);
       }
+		/* ---------- AU mobile validation (mirrors the Apps Script handler) ---------- */
+      function toE164AU(raw) {
+        var s = String(raw == null ? '' : raw).replace(/[^\d+]/g, '');
+        if (!s) return '';
+        if (s.indexOf('00') === 0) s = '+' + s.slice(2);
+        if (s.charAt(0) === '+') return '+' + s.replace(/\D/g, '');
+        var d = s.replace(/\D/g, '');
+        if (d.indexOf('0') === 0)  return '+61' + d.slice(1);
+        if (d.indexOf('61') === 0) return '+' + d;
+        if (d.length === 9 && d.charAt(0) === '4') return '+61' + d;
+        return '+' + d;
+      }
+      function validAUMobile(raw) {
+        var e = toE164AU(raw);
+        return /^\+614\d{8}$/.test(e) ? e : null;
+      }
       function validateStep(n) {
         if (n === 2) {
           profile.business = $('ob-business').value.trim();
@@ -1617,8 +1639,9 @@
           profile.contact.mobile = $('ob-mobile').value.trim();
           profile.contact.email = $('ob-email').value.trim();
           var nameOk = profile.contact.firstName.length > 0;
-          var digits = profile.contact.mobile.replace(/[^0-9]/g, '');
-          var phoneOk = digits.length >= 8;
+           var e164 = validAUMobile(profile.contact.mobile);
+          var phoneOk = !!e164;
+          if (e164) profile.contact.mobile = e164;   // send clean E.164 to the backend
           var emailOk = profile.contact.email === '' || /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(profile.contact.email);
           setErr('ob-firstname', 'ob-firstname-err', !nameOk);
           setErr('ob-mobile', 'ob-mobile-err', !phoneOk);
